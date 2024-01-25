@@ -1,0 +1,93 @@
+// writing a c program to reverse a linked list 
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node 
+{
+    int data ;
+    struct node *next ;
+
+};
+
+struct node * create (int num)
+{
+    int value ;
+    struct node *head = NULL ;
+    struct node *temp = NULL ;
+    struct node *p = NULL ;
+
+    for (int i=1 ; i<= num ; i++)
+    {
+        temp = ( struct node * ) malloc ( sizeof (struct node) ) ;
+        if(temp == NULL )
+        {
+            printf("insufficient memory available in your computer so cannot create a linked list !! \n");
+            exit(0) ;
+        }
+        printf("enter element number %d in your linked list : ", i) ;
+        scanf("%d",&value) ;
+        temp -> data = value ;
+        temp -> next = NULL  ;
+
+        if(head == NULL )
+        {
+            head = temp ;
+        }
+        else 
+        {
+            p = head ;
+            while (p -> next != NULL )
+            {
+                p = p -> next ;
+            }
+            p -> next = temp ;
+        }
+    }
+    return head ;
+}
+
+void traversal (struct node *head)
+{
+    struct node *ptr = head ;
+    while (ptr != NULL)
+    {
+        printf("%d\t", ptr -> data) ;
+        ptr = ptr -> next ;
+    }
+    printf("\n");
+}
+
+struct node * reverse (struct node *head)
+{
+    struct node *current = head ;
+    struct node *prev = NULL ;
+    struct node *temp ;
+
+    while (current != NULL )
+    {
+        temp = current -> next ;
+        current -> next = prev ;
+        prev = current ;
+        current = temp ;
+    }
+    return prev ;
+}
+int main()
+{
+    int num ;
+    printf("enter how many elements you want to give in your linked list : ");
+    scanf("%d",&num) ;
+
+    struct node *head  = create (num) ;
+    printf("your linked list is created and is as follows : \n");
+    traversal (head) ;
+    
+    // Now writing the code to reverse the linked list 
+    head = reverse (head);
+    printf("\nyour reverse of the given linked list is as follows : \n");
+    traversal (head) ;
+
+
+
+    return 0 ;
+}
