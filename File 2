@@ -1,0 +1,151 @@
+// writing a c program to chdck whether the linked list is same as the reversed lin
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *create(int num)
+{
+    int value;
+    struct node *head = NULL;
+    struct node *temp = NULL;
+    struct node *p = NULL;
+
+    for (int i = 1; i <= num; i++)
+    {
+        temp = (struct node *)malloc(sizeof(struct node));
+        if (temp == NULL)
+        {
+            printf("Insufficient memory available in heap so cannot create a linked
+            exit(0);
+        }
+        printf("enter element %d in your linked list : ", i);
+        scanf("%d", &value);
+
+        temp->data = value;
+        temp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = temp;
+        }
+        else
+        {
+            p = head;
+            while (p->next != NULL)
+            {
+                p = p->next;
+            }
+            p->next = temp;
+        }
+    }
+    return head;
+}
+
+void traversal(struct node *head)
+{
+    struct node *ptr = head;
+    while (ptr != NULL)
+    {
+        printf("%d\t", ptr->data);
+        ptr = ptr->next;
+    }
+    printf("\n");
+}
+
+struct node *reverse(struct node *head)
+{
+    struct node *current = head;
+    struct node *prev = NULL;
+    struct node *temp = NULL;
+
+    while (current != NULL)
+    {
+        temp = current->next;
+        current->next = prev;
+        prev = current;
+        current = temp;
+    }
+    return prev;
+}
+
+void check(struct node *original_head, struct node *head)
+{
+    int flag = 0;
+    while (head != NULL)
+    {
+        if (original_head->data != head->data)
+        {
+            flag = 1;
+            break;
+        }
+        original_head = original_head->next;
+        head = head->next;
+    }
+    if (flag == 0)
+    {
+        printf("linked list is palindrome !!\n");
+    }
+    else
+    {
+        printf("linked list is not palindrome !! \n");
+    }
+}
+
+int main()
+{
+    int num;
+    printf("enter how many elements you want to give in your linked list : ");
+    scanf("%d", &num);
+
+    struct node *head = create(num);
+    printf("your linked list is created and is as follows : \n");
+    traversal(head);
+
+    // Now copying the linked list in another linked list
+    struct node *original_head = NULL;
+    struct node *temp = head;
+    struct node *book = NULL;
+
+    while (temp != NULL)
+    {
+        book = (struct node *)malloc(sizeof(struct node));
+        if (book == NULL)
+        {
+            printf("problem in copying linked list so exiting the program  !!\n");
+            exit(1);
+        }
+        book->data = temp->data;
+        book->next = NULL;
+
+        if (original_head == NULL)
+        {
+            original_head = book;
+        }
+        else
+        {
+            struct node *current = original_head;
+            while (current->next != NULL)
+            {
+                current = current->next;
+            }
+            current->next = book;
+        }
+
+        temp = temp -> next ;
+    }
+
+    // Now reversing the linked list
+    head = reverse(head);
+    printf("your reverse of linked list is as follows : \n");
+    traversal(head);
+
+    // Now checking that linked list and its reverse are same or not
+    check(original_head, head);
+
+    return 0;
+}
